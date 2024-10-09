@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # MongoDB connection (update with your connection string)
-mongodb_uri = os.environ.get('DATABASE_URL')
+mongodb_uri = os.environ.get('MONGODB_URI')
 client = MongoClient(mongodb_uri)
 db = client['cosmetics']  # Use test database
 collection = db['cosmetics']  # Use cosmetics collection
