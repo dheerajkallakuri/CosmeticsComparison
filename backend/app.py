@@ -3,16 +3,13 @@ from flask import Flask, jsonify, request
 from pymongo import MongoClient
 from flask_cors import CORS
 from bson import ObjectId
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
 # MongoDB connection (update with your connection string)
-mongodb_uri = os.getenv('MONGODB_URI')
+mongodb_uri = os.environ.get('DATABASE_URL')
 client = MongoClient(mongodb_uri)
 db = client['cosmetics']  # Use test database
 collection = db['cosmetics']  # Use cosmetics collection
