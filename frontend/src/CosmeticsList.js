@@ -1,13 +1,18 @@
-import React from 'react';
+import React from "react";
 
-function CosmeticsList({ cosmetics, handleViewIngredients, Ingredients, CosmeticName, setIngredients }) {
+function CosmeticsList({
+  cosmetics,
+  handleViewIngredients,
+  Ingredients,
+  CosmeticName,
+  setIngredients,
+}) {
   return (
     <div>
-      <h1>Cosmetics List</h1>
       <table>
         <thead>
           <tr>
-            <th>Label</th>
+            <th>Type</th>
             <th>Brand</th>
             <th>Name</th>
             <th>Price</th>
@@ -22,7 +27,10 @@ function CosmeticsList({ cosmetics, handleViewIngredients, Ingredients, Cosmetic
               <td>{cosmetic.Name}</td>
               <td>${cosmetic.Price}</td>
               <td>
-                <button className='view-ingredients-button' onClick={() => handleViewIngredients(`${cosmetic.id}`)}>
+                <button
+                  className="view-ingredients-button"
+                  onClick={() => handleViewIngredients(`${cosmetic.id}`)}
+                >
                   View Ingredients
                 </button>
               </td>
@@ -35,16 +43,16 @@ function CosmeticsList({ cosmetics, handleViewIngredients, Ingredients, Cosmetic
       {Ingredients && (
         <div className="ingredients-modal">
           <div className="modal-content">
-              <button
-                className="close-modal"
-                onClick={() => setIngredients(null)}
-                title="Close"
-              >
-                ✖️
-              </button>
+            <button
+              className="close-modal"
+              onClick={() => setIngredients(null)}
+              title="Close"
+            >
+              ✖️
+            </button>
             <h3>Ingredients of {CosmeticName}</h3>
-            
-            <p>{Ingredients}</p> {/* Display the ingredients as a single string */}
+            <p>{Ingredients}</p>{" "}
+            {/* Display the ingredients as a single string */}
             <table className="table-footer">
               <tr>
                 <td>
@@ -52,7 +60,7 @@ function CosmeticsList({ cosmetics, handleViewIngredients, Ingredients, Cosmetic
                     className="copy-button"
                     onClick={() => navigator.clipboard.writeText(Ingredients)} // Copy the entire string
                     title="Copy"
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: "10px" }}
                   >
                     📋 Copy Ingredients
                   </button>

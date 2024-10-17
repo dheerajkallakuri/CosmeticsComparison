@@ -9,19 +9,42 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
-  min-width:100px;
+  min-width: 100px;
 }
 
 th {
   background-color: #f2f2f2;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.backToTopButton {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #8c1d40;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.table-container {
+  max-height: 1000px;
+  overflow-y: auto;
 }
 
 .view-ingredients-button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px;
   border: none;
@@ -62,6 +85,29 @@ th {
   margin-top: 0;
 }
 
+.filter-and-sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  flex-grow: 1; /* Allow the title to grow and take available space */
+  text-align: center; /* Center the title text */
+}
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem; /* Adjust size as needed */
+  cursor: pointer;
+  color: #8c1d40; /* Your preferred color */
+  margin-left: 10px; /* Space between title and button */
+}
+
+.close-button:hover {
+  color: #a54e61; /* Change color on hover for better UX */
+}
+
 .table-footer {
   border-collapse: collapse; /* Ensures no borders between cells */
   width: 100%; /* Optional: makes the table width 100% of its container */
@@ -80,7 +126,7 @@ th {
   padding: 10px; /* Adds some padding to buttons */
   font-size: 16px; /* Ensures a consistent font size */
   cursor: pointer; /* Changes cursor to pointer on hover */
-  background-color: #4CAF50; /* Green background for buttons */
+  background-color: #4caf50; /* Green background for buttons */
   color: white; /* White text for buttons */
   border: none; /* No border */
   border-radius: 5px; /* Optional: adds rounded corners */
@@ -90,18 +136,270 @@ th {
 }
 
 .close-modal {
-  position: relative;      /* Position the button absolutely */
-  bottom: 13px;              /* Place it 10px from the top */
-  right: -250px;            /* Place it 10px from the right */
-  background: none;       /* No background color */
-  border: none;           /* No border */
-  font-size: 20px;        /* Font size for visibility */
-  cursor: pointer;        /* Cursor indicates it’s clickable */
-  color: white;           /* Text color */
+  position: relative; /* Position the button absolutely */
+  bottom: 13px; /* Place it 10px from the top */
+  right: -250px; /* Place it 10px from the right */
+  background: none; /* No background color */
+  border: none; /* No border */
+  font-size: 20px; /* Font size for visibility */
+  cursor: pointer; /* Cursor indicates it’s clickable */
+  color: white; /* Text color */
   transition: background-color 0.3s; /* Transition for background color */
 }
 
 .close-modal:hover {
-  background-color: rgba(244, 67, 54, 0.8); /* Slightly change background color on hover */
-  border-radius: 50%;   /* Make it round */
+  background-color: rgba(
+    244,
+    67,
+    54,
+    0.8
+  ); /* Slightly change background color on hover */
+  border-radius: 50%; /* Make it round */
+}
+
+/* Modal Overlay */
+.filters-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.filters-options-scroll-container {
+  max-height: calc(80vh - 60px);
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px 0; /* Padding for the filter options */
+}
+
+.filters-close-modal {
+  position: relative; /* Position the button absolutely */
+  bottom: 13px; /* Place it 10px from the top */
+  right: -500px; /* Place it 10px from the right */
+  background: none; /* No background color */
+  border: none; /* No border */
+  font-size: 20px; /* Font size for visibility */
+  cursor: pointer; /* Cursor indicates it’s clickable */
+  color: white; /* Text color */
+  transition: background-color 0.3s; /* Transition for background color */
+}
+
+.filters-close-modal:hover {
+  background-color: rgba(
+    244,
+    67,
+    54,
+    0.8
+  ); /* Slightly change background color on hover */
+  border-radius: 50%; /* Make it round */
+}
+
+/* Modal Content */
+.filters-modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 800px;
+  max-height: 800px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sort-options {
+  font-family: Arial, sans-serif; /* Font style */
+  color: #333; /* Text color */
+}
+.expandable-row {
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between elements */
+  align-items: center; /* Center vertically */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 10px 15px; /* Padding inside the row */
+  background-color: #f7f7f7; /* Light background color */
+  border: 1px solid #ddd; /* Border around the row */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.expandable-row:hover {
+  background-color: #eaeaea; /* Darker background on hover */
+}
+
+h3 {
+  margin: 0; /* Remove default margin */
+  font-size: 1.2rem; /* Adjust heading size */
+}
+
+span {
+  font-size: 1.5rem; /* Increase font size for the arrow */
+  margin-left: 10px; /* Space between text and arrow */
+}
+
+select {
+  margin-top: 10px; /* Margin above the select box */
+  padding: 8px; /* Padding inside the select box */
+  font-size: 1rem; /* Font size for the select options */
+  border: 1px solid #ccc; /* Border for the select box */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #fff; /* Background color */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: border-color 0.3s; /* Smooth border transition */
+}
+
+select:focus {
+  outline: none; /* Remove default outline */
+  border-color: #8c1d40; /* Change border color on focus */
+}
+
+/* .expandable-row {
+  cursor: pointer; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+} */
+
+.checkbox-table {
+  width: 100%; /* Make the table take full width */
+  border-collapse: collapse; /* Collapse borders for better spacing */
+  border: none;
+}
+
+.checkbox-table td {
+  width: 33.33%; /* Set each cell to occupy one-third of the table */
+  vertical-align: top; /* Align checkbox and label to the top */
+  text-align: left; /* Align text to the left */
+  border: none;
+}
+
+.brand-scroll-container {
+  max-height: 200px; /* Adjust the height as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+  border: 1px solid #ccc; /* Optional: adds a border around the scroll area */
+  margin-top: 10px; /* Space above the table */
+}
+
+.brand-checkbox-table {
+  width: 100%; /* Make the table take full width */
+  border-collapse: collapse; /* Collapse borders for better spacing */
+  border: none;
+}
+
+.brand-checkbox-table td {
+  width: 20%; /* Set each cell to occupy one-third of the table */
+  vertical-align: top; /* Align checkbox and label to the top */
+  text-align: left; /* Align text to the left */
+  border: none;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.reset-button,
+.apply-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+
+.apply-button {
+  background-color: #4caf50; /* Green */
+  color: white;
+}
+
+/* Filter Button */
+.filter-button {
+  background-color: #8c1d40; /* Your preferred color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.price-options table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.price-options td {
+  padding: 8px;
+  vertical-align: middle;
+  border: none;
+  text-align: left;
+}
+
+.custom-range-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the radio button and the custom range inputs */
+}
+
+.custom-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-range input[type="number"] {
+  width: 70px;
+  padding: 5px;
+}
+
+.custom-range button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.brand-filter {
+  margin-top: 10px;
+}
+
+.brand-search-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.brand-table {
+  width: 100%;
+  display: table;
+}
+
+.brand-table tr {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.brand-table td {
+  width: 33%; /* Divides brands into three columns */
+  display: flex;
+  align-items: center;
+}
+
+.no-results {
+  margin-top: 10px;
+  color: red;
+}
+
+.clear-button {
+  background-color: #ccc;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 5px;
 }
